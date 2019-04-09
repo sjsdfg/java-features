@@ -1,4 +1,4 @@
-# **Java11 的新特性**
+# **Java 11 的新特性**
 
 ## 序
 
@@ -20,83 +20,84 @@ OpenJDK 64-Bit Server VM 18.9 (build 11+28, mixed mode)
 
 - [181: Nest-Based Access Control](https://openjdk.java.net/jeps/181)
 
-相关解读 [Java Nestmate 稳步推进](http://www.infoq.com/cn/news/2018/03/Nestmates)，[Specification for JEP 181: Nest-based Access Control](http://cr.openjdk.java.net/~dlsmith/nestmates.html)
-简单的理解就是 Class 类新增了 getNestHost，getNestMembers 方法
+> 相关解读 [Java Nestmate 稳步推进](http://www.infoq.com/cn/news/2018/03/Nestmates)，[Specification for JEP 181: Nest-based Access Control](http://cr.openjdk.java.net/~dlsmith/nestmates.html)
+> 简单的理解就是 Class 类新增了 getNestHost，getNestMembers 方法
 
 - [309: Dynamic Class-File Constants](https://openjdk.java.net/jeps/309)
 
-相关解读 [Specification for JEP 309: Dynamic Class-File Constants (JROSE EDITS)](http://cr.openjdk.java.net/~jrose/jvm/constant-dynamic-jrose.html)
-jvm 规范里头对 Constant pool 新增一类 CONSTANT_Dynamic
+> 相关解读 [Specification for JEP 309: Dynamic Class-File Constants (JROSE EDITS)](http://cr.openjdk.java.net/~jrose/jvm/constant-dynamic-jrose.html)
+> jvm 规范里头对 Constant pool 新增一类 CONSTANT_Dynamic
 
 - [315: Improve Aarch64 Intrinsics](https://openjdk.java.net/jeps/315)
 
-对于 AArch64 处理器改进现有的 string、array 相关函数，并新实现 java.lang.Math 的 sin、cos、log 方法
+> 对于 AArch64 处理器改进现有的 string、array 相关函数，并新实现 java.lang.Math 的 sin、cos、log 方法
 
 - [318: Epsilon: A No-Op Garbage Collector](https://openjdk.java.net/jeps/318)
 
-引入名为 Epsilon 的垃圾收集器，该收集器不做任何垃圾回收，可用于性能测试、短生命周期的任务等，使用 - XX:+UseEpsilonGC 开启
+> 引入名为 Epsilon 的垃圾收集器，该收集器不做任何垃圾回收，可用于性能测试、短生命周期的任务等，使用 - XX:+UseEpsilonGC 开启
 
 - [320: Remove the Java EE and CORBA Modules](https://openjdk.java.net/jeps/320)(`重磅`)
 
-将 java9 标记废弃的 Java EE 及 CORBA 模块移除掉，具体如下：（1）xml 相关的，java.xml.ws, java.xml.bind，java.xml.ws，java.xml.ws.annotation，jdk.xml.bind，jdk.xml.ws 被移除，只剩下 java.xml，java.xml.crypto,jdk.xml.dom 这几个模块；（2）java.corba，java.se.ee，java.activation，java.transaction 被移除，但是 java11 新增一个 java.transaction.xa 模块
+> 将 java9 标记废弃的 Java EE 及 CORBA 模块移除掉，具体如下：
+> 1. xml 相关的，java.xml.ws, java.xml.bind，java.xml.ws，java.xml.ws.annotation，jdk.xml.bind，jdk.xml.ws 被移除，只剩下 java.xml，java.xml.crypto,jdk.xml.dom 这几个模块；
+> 2. java.corba，java.se.ee，java.activation，java.transaction 被移除，但是 java11 新增一个 java.transaction.xa 模块
 
 - [321: HTTP Client (Standard)](https://openjdk.java.net/jeps/321)(`重磅`)
 
-相关解读 [java9 系列 (六)HTTP/2 Client (Incubator)](https://segmentfault.com/a/1190000013518969)，[HTTP Client Examples and Recipes](https://openjdk.java.net/groups/net/httpclient/recipes.html)，在 java9 及 10 被标记 incubator 的模块 jdk.incubator.httpclient，在 java11 被标记为正式，改为 java.net.http 模块。
+> 相关解读 [java9 系列 (六)HTTP/2 Client (Incubator)](https://segmentfault.com/a/1190000013518969)，[HTTP Client Examples and Recipes](https://openjdk.java.net/groups/net/httpclient/recipes.html)，在 java9 及 10 被标记 incubator 的模块 jdk.incubator.httpclient，在 java11 被标记为正式，改为 java.net.http 模块。
 
 - [323: Local-Variable Syntax for Lambda Parameters](https://openjdk.java.net/jeps/323)
 
-相关解读 [New Java 11 Language Feature: Local-Variable Type Inference (var) extended to Lambda Expression Parameters](https://medium.com/the-java-report/java-11-sneak-peek-local-variable-type-inference-var-extended-to-lambda-expression-parameters-e31e3338f1fe)
-允许 lambda 表达式使用 var 变量，比如 (var x, var y) -> x.process(y)，如果仅仅是这样写，倒是无法看出写 var 有什么优势而且反而觉得有点多此一举，但是如果要给 lambda 表达式变量标注注解的话，那么这个时候 var 的作用就突显出来了 (@Nonnull var x, @Nullable var y) -> x.process(y)
+> 相关解读 [New Java 11 Language Feature: Local-Variable Type Inference (var) extended to Lambda Expression Parameters](https://medium.com/the-java-report/java-11-sneak-peek-local-variable-type-inference-var-extended-to-lambda-expression-parameters-e31e3338f1fe)
+> 允许 lambda 表达式使用 var 变量，比如 (var x, var y) -> x.process(y)，如果仅仅是这样写，倒是无法看出写 var 有什么优势而且反而觉得有点多此一举，但是如果要给 lambda 表达式变量标注注解的话，那么这个时候 var 的作用就突显出来了 (@Nonnull var x, @Nullable var y) -> x.process(y)
 
 - [324: Key Agreement with Curve25519 and Curve448](https://openjdk.java.net/jeps/324)
 
-使用 RFC 7748 中描述的 Curve25519 和 Curve448 实现 key agreement
+> 使用 RFC 7748 中描述的 Curve25519 和 Curve448 实现 key agreement
 
 - [327: Unicode 10](https://openjdk.java.net/jeps/327)
 
-升级现有的 API，支持 Unicode10.0.0
+> 升级现有的 API，支持 Unicode10.0.0
 
 - [328: Flight Recorder](https://openjdk.java.net/jeps/328)
 
-相关解读 [Java 11 Features: Java Flight Recorder](https://dzone.com/articles/java-11-features-java-flight-recorder)
-Flight Recorder 以前是商业版的特性，在 java11 当中开源出来，它可以导出事件到文件中，之后可以用 Java Mission Control 来分析。可以在应用启动时配置 java -XX:StartFlightRecording，或者在应用启动之后，使用 jcmd 来录制，比如
-
-```
-$ jcmd <pid> JFR.start
-$ jcmd <pid> JFR.dump filename=recording.jfr
-$ jcmd <pid> JFR.stop
-```
+> 相关解读 [Java 11 Features: Java Flight Recorder](https://dzone.com/articles/java-11-features-java-flight-recorder)
+> Flight Recorder 以前是商业版的特性，在 java11 当中开源出来，它可以导出事件到文件中，之后可以用 Java Mission Control 来分析。可以在应用启动时配置 java -XX:StartFlightRecording，或者在应用启动之后，使用 jcmd 来录制，比如
+> ```
+> $ jcmd <pid> JFR.start
+> $ jcmd <pid> JFR.dump filename=recording.jfr
+> $ jcmd <pid> JFR.stop
+> ```
 
 - [329: ChaCha20 and Poly1305 Cryptographic Algorithms](https://openjdk.java.net/jeps/329)
 
-实现 RFC 7539 的 ChaCha20 and ChaCha20-Poly1305 加密算法
+> 实现 RFC 7539 的 ChaCha20 and ChaCha20-Poly1305 加密算法
 
 - [330: Launch Single-File Source-Code Programs](https://openjdk.java.net/jeps/330)(`重磅`)
 
-相关解读 [Launch Single-File Source-Code Programs in JDK 11](https://dzone.com/articles/launch-single-file-source-code-programs-in-jdk-11)
-有了这个特性，可以直接 java HelloWorld.java 来执行 java 文件了，无需先 javac 编译为 class 文件然后再 java 执行 class 文件，两步合成一步
+> 相关解读 [Launch Single-File Source-Code Programs in JDK 11](https://dzone.com/articles/launch-single-file-source-code-programs-in-jdk-11)
+> 有了这个特性，可以直接 java HelloWorld.java 来执行 java 文件了，无需先 javac 编译为 class 文件然后再 java 执行 class 文件，两步合成一步
 
 - [331: Low-Overhead Heap Profiling](https://openjdk.java.net/jeps/331)
 
-通过 JVMTI 的 SampledObjectAlloc 回调提供了一个开销低的 heap 分析方式
+> 通过 JVMTI 的 SampledObjectAlloc 回调提供了一个开销低的 heap 分析方式
 
 - [332: Transport Layer Security (TLS) 1.3](https://openjdk.java.net/jeps/332)(`重磅`)
 
-支持 RFC 8446 中的 TLS 1.3 版本
+> 支持 RFC 8446 中的 TLS 1.3 版本
 
 - [333: ZGC: A Scalable Low-Latency Garbage Collector(Experimental)](https://openjdk.java.net/jeps/333)(`重磅`)
 
-相关解读 [JDK11 的 ZGC 小试牛刀](https://segmentfault.com/a/1190000015725327)，[一文读懂 Java 11 的 ZGC 为何如此高效](https://mp.weixin.qq.com/s/nAjPKSj6rqB_eaqWtoJsgw)
+> 相关解读 [JDK11 的 ZGC 小试牛刀](https://segmentfault.com/a/1190000015725327)，[一文读懂 Java 11 的 ZGC 为何如此高效](https://mp.weixin.qq.com/s/nAjPKSj6rqB_eaqWtoJsgw)
 
 - [335: Deprecate the Nashorn JavaScript Engine](https://openjdk.java.net/jeps/335)
 
-相关解读 [Oracle 弃用 Nashorn JavaScript 引擎](http://www.infoq.com/cn/news/2018/06/deprecate-nashorn)，[Oracle GraalVM announces support for Nashorn migration](https://medium.com/graalvm/oracle-graalvm-announces-support-for-nashorn-migration-c04810d75c1f)
-废除 Nashorn javascript 引擎，在后续版本准备移除掉，有需要的可以考虑使用 GraalVM
+> 相关解读 [Oracle 弃用 Nashorn JavaScript 引擎](http://www.infoq.com/cn/news/2018/06/deprecate-nashorn)，[Oracle GraalVM announces support for Nashorn migration](https://medium.com/graalvm/oracle-graalvm-announces-support-for-nashorn-migration-c04810d75c1f)
+> 废除 Nashorn javascript 引擎，在后续版本准备移除掉，有需要的可以考虑使用 GraalVM
 
 - [336: Deprecate the Pack200 Tools and API](https://openjdk.java.net/jeps/336)
 
-废除了 pack200 以及 unpack200 工具以及 java.util.jar 中的 Pack200 API。Pack200 主要是用来压缩 jar 包的工具，不过由于网络下载速度的提升以及 java9 引入模块化系统之后不再依赖 Pack200，因此这个版本将其移除掉。
+> 废除了 pack200 以及 unpack200 工具以及 java.util.jar 中的 Pack200 API。Pack200 主要是用来压缩 jar 包的工具，不过由于网络下载速度的提升以及 java9 引入模块化系统之后不再依赖 Pack200，因此这个版本将其移除掉。
 
 ## 细项解读
 
@@ -106,33 +107,33 @@ $ jcmd <pid> JFR.stop
 
 - Collection.toArray(IntFunction)
 
-```
-    @Test
-    public void testCollectionToArray(){
-        Set<String> names = Set.of("Fred", "Wilma", "Barney", "Betty");
-        String[] copy = new String[names.size()];
-        names.toArray(copy);
-        System.out.println(Arrays.toString(copy));
-        System.out.println(Arrays.toString(names.toArray(String[]::new)));
-    }
+```java
+@Test
+public void testCollectionToArray(){
+    Set<String> names = Set.of("Fred", "Wilma", "Barney", "Betty");
+    String[] copy = new String[names.size()];
+    names.toArray(copy);
+    System.out.println(Arrays.toString(copy));
+    System.out.println(Arrays.toString(names.toArray(String[]::new)));
+}
 ```
 
-Collection 类新增 toArray(IntFunction) 的 default 方法，可以直接通过传入 IntFunction 告知要转换的目标类型
+> Collection 类新增 toArray(IntFunction) 的 default 方法，可以直接通过传入 IntFunction 告知要转换的目标类型
 
 - String.strip
 
-```
-    @Test
-    public void testStrip(){
-        String text = "  \u2000a  b  ";
-        Assert.assertEquals("a  b",text.strip());
-        Assert.assertEquals("\u2000a  b",text.trim());
-        Assert.assertEquals("a  b  ",text.stripLeading());
-        Assert.assertEquals("  \u2000a  b",text.stripTrailing());
-    }
+```java
+@Test
+public void testStrip(){
+    String text = "  u2000a  b  ";
+    Assert.assertEquals("a  b",text.strip());
+    Assert.assertEquals("u2000a  b",text.trim());
+    Assert.assertEquals("a  b  ",text.stripLeading());
+    Assert.assertEquals("  u2000a  b",text.stripTrailing());
+}
 ```
 
-java11 对 String 类新增了 strip，stripLeading 以及 stripTrailing 方法，除了 strip 相关的方法还新增了 isBlank、lines、repeat(int) 等方法
+> Java 11 对 String 类新增了 strip，stripLeading 以及 stripTrailing 方法，除了 strip 相关的方法还新增了 isBlank、lines、repeat(int) 等方法
 
 - 添加了 Google Trust Services GlobalSign Root Certificates
 - 添加了 GoDaddy Root Certificates
