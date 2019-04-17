@@ -8,7 +8,7 @@
 
 - [286: Local-Variable Type Inference](http://openjdk.java.net/jeps/286)(`重磅`)
 
-相关解读: [java10 系列 (二)Local-Variable Type Inference](https://segmentfault.com/a/1190000014025792)
+> 相关解读: [java10 系列 (二)Local-Variable Type Inference](https://segmentfault.com/a/1190000014025792)
 
 - [296: Consolidate the JDK Forest into a Single Repository](http://openjdk.java.net/jeps/296)
 - [304: Garbage-Collector Interface](http://openjdk.java.net/jeps/304)
@@ -20,15 +20,15 @@
 - [316: Heap Allocation on Alternative Memory Devices](http://openjdk.java.net/jeps/316)
 - [317: Experimental Java-Based JIT Compiler](http://openjdk.java.net/jeps/317)(`重磅`)
 
-相关解读: [Java10 来了，来看看它一同发布的全新 JIT 编译器](https://mp.weixin.qq.com/s/NyDANTzK_uv6hwTXjknDLw)
+> 相关解读: [Java10 来了，来看看它一同发布的全新 JIT 编译器](https://mp.weixin.qq.com/s/NyDANTzK_uv6hwTXjknDLw)
 
 - [319: Root Certificates](http://openjdk.java.net/jeps/319)
 
-相关解读: [OpenJDK 10 Now Includes Root CA Certificates](https://dzone.com/articles/openjdk-10-now-includes-root-ca-certificates)
+> 相关解读: [OpenJDK 10 Now Includes Root CA Certificates](https://dzone.com/articles/openjdk-10-now-includes-root-ca-certificates)
 
 - [322: Time-Based Release Versioning](http://openjdk.java.net/jeps/322)
 
-相关解读: [java10 系列 (一)Time-Based Release Versioning](https://segmentfault.com/a/1190000013885784)
+> 相关解读: [java10 系列 (一)Time-Based Release Versioning](https://segmentfault.com/a/1190000013885784)
 
 ## 细项解读
 
@@ -40,44 +40,43 @@
 
 - 源码
 
-```
-    /**
-     * If a value is present, returns the value, otherwise throws
-     * {@code NoSuchElementException}.
-     *
-     * @return the non-{@code null} value described by this {@code Optional}
-     * @throws NoSuchElementException if no value is present
-     * @since 10
-     */
-    public T orElseThrow() {
-        if (value == null) {
-            throw new NoSuchElementException("No value present");
-        }
-        return value;
+```java
+/**
+ * If a value is present, returns the value, otherwise throws
+ * {@code NoSuchElementException}.
+ *
+ * @return the non-{@code null} value described by this {@code Optional}
+ * @throws NoSuchElementException if no value is present
+ * @since 10
+ */
+public T orElseThrow() {
+    if (value == null) {
+        throw new NoSuchElementException("No value present");
     }
+    return value;
+}
 ```
 
 - 实例
 
-```
-    @Test
-    public void testOrElseThrow(){
-        var data = List.of("a","b","c");
-        Optional<String> optional = data.stream()
-                .filter(s -> s.startsWith("z"))
-                .findAny();
-        String res = optional.orElseThrow();
-        System.out.println(res);
-    }
+```java
+@Test
+public void testOrElseThrow(){
+    var data = List.of("a","b","c");
+    Optional<String> optional = data.stream()
+            .filter(s -> s.startsWith("z"))
+            .findAny();
+    String res = optional.orElseThrow();
+    System.out.println(res);
+}
 ```
 
-新增了 orElseThrow 与 get 相对应
+> 新增了 orElseThrow 与 get 相对应
 
 输出
 
-```
+```shell
 java.util.NoSuchElementException: No value present
-
     at java.base/java.util.Optional.orElseThrow(Optional.java:371)
     at com.example.FeatureTest.testOrElseThrow(FeatureTest.java:19)
     at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
@@ -106,60 +105,60 @@ java.util.NoSuchElementException: No value present
 
 ### APIs for Creating Unmodifiable Collections
 
-java9 新增的 of 工厂方法的接口参数是一个个元素，java10 新增 List.copyOf, Set.copyOf, 及 Map.copyOf 用来从已有集合创建 ImmutableCollections
+java9 新增的 of 工厂方法的接口参数是一个个元素，java10 新增 List.copyOf，Set.copyOf 及 Map.copyOf 用来从已有集合创建 ImmutableCollections
 
 - List.copyOf 源码
 
-```
-    /**
-     * Returns an <a href="#unmodifiable">unmodifiable List</a> containing the elements of
-     * the given Collection, in its iteration order. The given Collection must not be null,
-     * and it must not contain any null elements. If the given Collection is subsequently
-     * modified, the returned List will not reflect such modifications.
-     *
-     * @implNote
-     * If the given Collection is an <a href="#unmodifiable">unmodifiable List</a>,
-     * calling copyOf will generally not create a copy.
-     *
-     * @param <E> the {@code List}'s element type
-     * @param coll a {@code Collection} from which elements are drawn, must be non-null
-     * @return a {@code List} containing the elements of the given {@code Collection}
-     * @throws NullPointerException if coll is null, or if it contains any nulls
-     * @since 10
-     */
-    @SuppressWarnings("unchecked")
-    static <E> List<E> copyOf(Collection<? extends E> coll) {
-        if (coll instanceof ImmutableCollections.AbstractImmutableList) {
-            return (List<E>)coll;
-        } else {
-            return (List<E>)List.of(coll.toArray());
-        }
+```java
+/**
+ * Returns an <a href="#unmodifiable">unmodifiable List</a> containing the elements of
+ * the given Collection, in its iteration order. The given Collection must not be null,
+ * and it must not contain any null elements. If the given Collection is subsequently
+ * modified, the returned List will not reflect such modifications.
+ *
+ * @implNote
+ * If the given Collection is an <a href="#unmodifiable">unmodifiable List</a>,
+ * calling copyOf will generally not create a copy.
+ *
+ * @param <E> the {@code List}'s element type
+ * @param coll a {@code Collection} from which elements are drawn, must be non-null
+ * @return a {@code List} containing the elements of the given {@code Collection}
+ * @throws NullPointerException if coll is null, or if it contains any nulls
+ * @since 10
+ */
+@SuppressWarnings("unchecked")
+static <E> List<E> copyOf(Collection<? extends E> coll) {
+    if (coll instanceof ImmutableCollections.AbstractImmutableList) {
+        return (List<E>)coll;
+    } else {
+        return (List<E>)List.of(coll.toArray());
     }
+}
 ```
 
 - 实例
 
-```
-    @Test(expected = UnsupportedOperationException.class)
-    public void testCollectionCopyOf(){
-        List<String> list = IntStream.rangeClosed(1,10)
-                .mapToObj(i -> "num"+i)
-                .collect(Collectors.toList());
-        List<String> newList = List.copyOf(list);
-        newList.add("not allowed");
-    }
+```java
+@Test(expected = UnsupportedOperationException.class)
+public void testCollectionCopyOf(){
+    List<String> list = IntStream.rangeClosed(1,10)
+            .mapToObj(i -> "num"+i)
+            .collect(Collectors.toList());
+    List<String> newList = List.copyOf(list);
+    newList.add("not allowed");
+}
 ```
 
-Collectors 新增了 toUnmodifiableList, toUnmodifiableSet, 以及 toUnmodifiableMap 方法
+> Collectors 新增了 toUnmodifiableList， toUnmodifiableSet 以及 toUnmodifiableMap 方法
 
-```
-    @Test(expected = UnsupportedOperationException.class)
-    public void testCollectionCopyOf(){
-        List<String> list = IntStream.rangeClosed(1,10)
-                .mapToObj(i -> "num"+i)
-                .collect(Collectors.toUnmodifiableList());
-        list.add("not allowed");
-    }
+```java
+@Test(expected = UnsupportedOperationException.class)
+public void testCollectionCopyOf(){
+    List<String> list = IntStream.rangeClosed(1,10)
+            .mapToObj(i -> "num"+i)
+            .collect(Collectors.toUnmodifiableList());
+    list.add("not allowed");
+}
 ```
 
 ## 小结
