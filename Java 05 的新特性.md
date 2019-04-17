@@ -19,44 +19,44 @@
 
 所谓类型擦除指的就是 Java 源码中的范型信息只允许停留在编译前期，而编译后的字节码文件中将不再保留任何的范型信息。也就是说，范型信息在编译时将会被全部删除，其中范型类型的类型参数则会被替换为 Object 类型，并在实际使用时强制转换为指定的目标数据类型。而 C++ 中的模板则会在编译时将模板类型中的类型参数根据所传递的指定数据类型生成相对应的目标代码。
 
-```
+```java
 Map<Integer, Integer> squares = new HashMap<Integer, Integer>();
 ```
 
 - 通配符类型：避免 unchecked 警告，问号表示任何类型都可以接受
 
-```
+```java
 public void printList(List<?> list, PrintStream out) throws IOException {
     for (Iterator<?> i = list.iterator(); i.hasNext(); ) {
-      out.println(i.next().toString());
+        out.println(i.next().toString());
     }
-  }
+}
 ```
 
 - 限制类型
 
-```
+```java
 public static <A extends Number> double sum(Box<A> box1,Box<A> box2){
     double total = 0;
     for (Iterator<A> i = box1.contents.iterator(); i.hasNext(); ) {
-      total = total + i.next().doubleValue();
+        total = total + i.next().doubleValue();
     }
     for (Iterator<A> i = box2.contents.iterator(); i.hasNext(); ) {
-      total = total + i.next().doubleValue();
+        total = total + i.next().doubleValue();
     }
     return total;
-  }
+}
 ```
 
 ### 2、枚举
 
 - EnumMap
 
-```
+```java
 public void testEnumMap(PrintStream out) throws IOException {
     // Create a map with the key and a String message
     EnumMap<AntStatus, String> antMessages =
-      new EnumMap<AntStatus, String>(AntStatus.class);
+          new EnumMap<AntStatus, String>(AntStatus.class);
     // Initialize the map
     antMessages.put(AntStatus.INITIALIZING, "Initializing Ant...");
     antMessages.put(AntStatus.COMPILING,    "Compiling Java classes...");
@@ -67,66 +67,66 @@ public void testEnumMap(PrintStream out) throws IOException {
     antMessages.put(AntStatus.ERROR,        "Error occurred.");
     // Iterate and print messages
     for (AntStatus status : AntStatus.values() ) {
-      out.println("For status " + status + ", message is: " +
-                  antMessages.get(status));
+        out.println("For status " + status + ", message is: " +
+                          antMessages.get(status));
     }
-  }
+}
 ```
 
 - switch 枚举
 
-```
+```java
 public String getDescription() {
     switch(this) {
-      case ROSEWOOD:      return "Rosewood back and sides";
-      case MAHOGANY:      return "Mahogany back and sides";
-      case ZIRICOTE:      return "Ziricote back and sides";
-      case SPRUCE:        return "Sitka Spruce top";
-      case CEDAR:         return "Wester Red Cedar top";
-      case AB_ROSETTE:    return "Abalone rosette";
-      case AB_TOP_BORDER: return "Abalone top border";
-      case IL_DIAMONDS:   
-        return "Diamonds and squares fretboard inlay";
-      case IL_DOTS:
-        return "Small dots fretboard inlay";
-      default: return "Unknown feature";
+        case ROSEWOOD:      return "Rosewood back and sides";
+        case MAHOGANY:      return "Mahogany back and sides";
+        case ZIRICOTE:      return "Ziricote back and sides";
+        case SPRUCE:        return "Sitka Spruce top";
+        case CEDAR:         return "Wester Red Cedar top";
+        case AB_ROSETTE:    return "Abalone rosette";
+        case AB_TOP_BORDER: return "Abalone top border";
+        case IL_DIAMONDS:   
+                return "Diamonds and squares fretboard inlay";
+        case IL_DOTS:
+                return "Small dots fretboard inlay";
+        default: return "Unknown feature";
     }
-  }
+}
 ```
 
 ### 3、Autoboxing 与 Unboxing
 
 将 primitive 类型转换成对应的 wrapper 类型：Boolean、Byte、Short、Character、Integer、Long、Float、Double
 
-```
+```java
 public static void m1(Integer i){
-        System.out.println("this is integer");
-    }
-    public static void m1(double d){
-        System.out.println("this is double");
-    }
+    System.out.println("this is integer");
+}
+public static void m1(double d){
+    System.out.println("this is double");
+}
 ```
 
 m1(1) 输出的是 double，方法匹配时线下兼容，不考虑 boxing 与 unboxing。
 
 ### 4、vararg
 
-```
+```java
 private String print(Object... values) {
     StringBuilder sb = new StringBuilder();
     for (Object o : values) {
-      sb.append(o.toString())
-        .append(" ");
+        sb.append(o.toString())
+                .append(" ");
     }
     return sb.toString();
-  }
+}
 ```
 
 ### 5、annotation
 
 - Inherited 表示该注解是否对类的子类继承的方法等起作用
 
-```
+```java
 @Documented
 @Inherited
 @Retention(RetentionPolicy.RUNTIME)
@@ -135,21 +135,22 @@ public @interface InProgress { }
 
 - 指定 Target
 
-```
+```java
 @Documented
 @Retention(RetentionPolicy.RUNTIME)
 @Target({ElementType.TYPE,
          ElementType.METHOD, 
          ElementType.CONSTRUCTOR, 
-         ElementType.ANNOTATION_TYPE})
-public @interface TODO { 
-  String value();
+         ElementType.ANNOTATION_TYPE
+})
+public @interface TODO {
+    String value();
 }
 ```
 
 - Target 类型
 
-```
+```java
 public enum ElementType {
     /** Class, interface (including annotation type), or enum declaration */
     TYPE,
@@ -172,7 +173,7 @@ public enum ElementType {
 
 - rentation 表示 annotation 是否保留在编译过的 class 文件中还是在运行时可读。
 
-```
+```java
 public enum RetentionPolicy {
     /**
      * Annotations are to be discarded by the compiler.
@@ -196,105 +197,107 @@ public enum RetentionPolicy {
 
 - 通过反射获取元信息
 
-```
+```java
 public class ReflectionTester {
-  public ReflectionTester() {
-  }
-  public void testAnnotationPresent(PrintStream out) throws IOException {
-    Class c = Super.class;
-    boolean inProgress = c.isAnnotationPresent(InProgress.class);
-    if (inProgress) {
-      out.println("Super is In Progress");
-    } else {
-      out.println("Super is not In Progress");
+    public ReflectionTester() {
     }
-  }
-  public void testInheritedAnnotation(PrintStream out) throws IOException {
-    Class c = Sub.class;
-    boolean inProgress = c.isAnnotationPresent(InProgress.class);
-    if (inProgress) {
-      out.println("Sub is In Progress");
-    } else {
-      out.println("Sub is not In Progress");
+    public void testAnnotationPresent(PrintStream out) throws IOException {
+        Class c = Super.class;
+        Boolean inProgress = c.isAnnotationPresent(InProgress.class);
+        if (inProgress) {
+            out.println("Super is In Progress");
+        } else {
+            out.println("Super is not In Progress");
+        }
     }
-  }
-  public void testGetAnnotation(PrintStream out) 
-    throws IOException, NoSuchMethodException {
-    Class c = AnnotationTester.class;
-    AnnotatedElement element = c.getMethod("calculateInterest", 
-                                  float.class, float.class);
-    GroupTODO groupTodo = element.getAnnotation(GroupTODO.class);
-    String assignedTo = groupTodo.assignedTo();
-    out.println("TODO Item on Annotation Tester is assigned to: '" + 
-        assignedTo + "'");
-  }
-  public void printAnnotations(AnnotatedElement e, PrintStream out)
-    throws IOException {
-    out.printf("Printing annotations for '%s'%n%n", e.toString());
-    Annotation[] annotations = e.getAnnotations();
-    for (Annotation a : annotations) {
-      out.printf("    * Annotation '%s' found%n", 
-        a.annotationType().getName());
+    public void testInheritedAnnotation(PrintStream out) throws IOException {
+        Class c = Sub.class;
+        Boolean inProgress = c.isAnnotationPresent(InProgress.class);
+        if (inProgress) {
+            out.println("Sub is In Progress");
+        } else {
+            out.println("Sub is not In Progress");
+        }
     }
-  }
-  public static void main(String[] args) {
-    try {
-      ReflectionTester tester = new ReflectionTester();
-      tester.testAnnotationPresent(System.out);
-      tester.testInheritedAnnotation(System.out);
-      tester.testGetAnnotation(System.out);
-      Class c = AnnotationTester.class;
-      AnnotatedElement element = c.getMethod("calculateInterest", 
-                                    float.class, float.class);      
-      tester.printAnnotations(element, System.out);
-    } catch (Exception e) {
-      e.printStackTrace();
-    } 
-  }
+    public void testGetAnnotation(PrintStream out) 
+        throws IOException, NoSuchMethodException {
+        Class c = AnnotationTester.class;
+        AnnotatedElement element = c.getMethod("calculateInterest", 
+                                          float.class, float.class);
+        GroupTODO groupTodo = element.getAnnotation(GroupTODO.class);
+        String assignedTo = groupTodo.assignedTo();
+        out.println("TODO Item on Annotation Tester is assigned to: '" + 
+                assignedTo + "'");
+    }
+    public void printAnnotations(AnnotatedElement e, PrintStream out)
+        throws IOException {
+        out.printf("Printing annotations for '%s'%n%n", e.toString());
+        Annotation[] annotations = e.getAnnotations();
+        for (Annotation a : annotations) {
+            out.printf("    * Annotation '%s' found%n", 
+                    a.annotationType().getName());
+        }
+    }
+    public static void main(String[] args) {
+        try {
+            ReflectionTester tester = new ReflectionTester();
+            tester.testAnnotationPresent(System.out);
+            tester.testInheritedAnnotation(System.out);
+            tester.testGetAnnotation(System.out);
+            Class c = AnnotationTester.class;
+            AnnotatedElement element = c.getMethod("calculateInterest", 
+                                                float.class, float.class);
+            tester.printAnnotations(element, System.out);
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 }
 ```
 
 ### 6、for/in
 
 for/in 循环办不到的事情：
-（1）遍历同时获取 index
-（2）集合逗号拼接时去掉最后一个
-（3）遍历的同时删除元素
+
+1. 遍历同时获取 index
+2. 集合逗号拼接时去掉最后一个
+3. 遍历的同时删除元素
 
 ### 7、静态 import
 
-```
+```java
 import static java.lang.System.err;
 import static java.lang.System.out;
 import java.io.IOException;
 import java.io.PrintStream;
 public class StaticImporter {
-  public static void writeError(PrintStream err, String msg) 
-    throws IOException {
-   
-    // Note that err in the parameter list overshadows the imported err
-    err.println(msg); 
-  }
-  public static void main(String[] args) {
-    if (args.length < 2) {
-      err.println(
-        "Incorrect usage: java com.oreilly.tiger.ch08 [arg1] [arg2]");
-      return;
+    public static void writeError(PrintStream err, String msg) 
+        throws IOException {
+        // Note that err in the parameter list overshadows the imported err
+        err.println(msg);
     }
-    out.println("Good morning, " + args[0]);
-    out.println("Have a " + args[1] + " day!");
-    try {
-      writeError(System.out, "Error occurred.");
-    } catch (IOException e) {
-      e.printStackTrace();
+    public static void main(String[] args) {
+        if (args.length < 2) {
+            err.println(
+                    "Incorrect usage: java com.oreilly.tiger.ch08 [arg1] [arg2]");
+            return;
+        }
+        out.println("Good morning, " + args[0]);
+        out.println("Have a " + args[1] + " day!");
+        try {
+            writeError(System.out, "Error occurred.");
+        }
+        catch (IOException e) {
+            e.printStackTrace();
+        }
     }
-  }
 }
 ```
 
 ### 8、格式化
 
-```
+```java
 /**
  * java.text.DateFormat
  * java.text.SimpleDateFormat
@@ -316,9 +319,10 @@ public class FormatTester {
             while ((line = reader.readLine()) != null) {
                 System.out.printf("Line %d: %s%n", i++, line);
             }
-        } catch (Exception e) {
+        }
+        catch (Exception e) {
             System.err.printf("Unable to open file named '%s': %s",
-                    filename, e.getMessage());
+                                filename, e.getMessage());
         }
     }
     public static void stringFormat() {
@@ -344,7 +348,7 @@ public class FormatTester {
         // parentheses rather than a minus sign.  Group separators are
         // automatically inserted.
         formatter.format("Amount gained or lost since last statement: $ %(,.2f",
-                6217.58);
+                        6217.58);
         // -> "Amount gained or lost since last statement: $ (6,217.58)"
     }
     public static void messageFormat() {
@@ -358,7 +362,8 @@ public class FormatTester {
         SimpleDateFormat format = new SimpleDateFormat("yyyyMMddHHmmss");
         try {
             System.out.println(format.format(format.parse(str)));
-        } catch (ParseException e) {
+        }
+        catch (ParseException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
@@ -377,80 +382,81 @@ public class FormatTester {
 
 - uncaught exception
 
-```
+```java
 public class BubbleSortThread extends Thread {
-  private int[] numbers;
-  public BubbleSortThread(int[] numbers) {
-    setName("Simple Thread");
-    setUncaughtExceptionHandler(
-      new SimpleThreadExceptionHandler());
-    this.numbers = numbers;
-  }
-  public void run() {
-    int index = numbers.length;
-    boolean finished = false;
-    while (!finished) {
-      index--;
-      finished = true;
-      for (int i=0; i<index; i++) {
-        // Create error condition
-        if (numbers[i+1] < 0) {
-          throw new IllegalArgumentException(
-            "Cannot pass negative numbers into this thread!");
+    private int[] numbers;
+    public BubbleSortThread(int[] numbers) {
+        setName("Simple Thread");
+        setUncaughtExceptionHandler(
+              new SimpleThreadExceptionHandler());
+        this.numbers = numbers;
+    }
+    public void run() {
+        int index = numbers.length;
+        Boolean finished = false;
+        while (!finished) {
+            index--;
+            finished = true;
+            for (int i=0; i<index; i++) {
+                // Create error condition
+                if (numbers[i+1] < 0) {
+                    throw new IllegalArgumentException(
+                                "Cannot pass negative numbers into this thread!");
+                }
+                if (numbers[i] > numbers[i+1]) {
+                    // swap
+                    int temp = numbers[i];
+                    numbers[i] = numbers[i+1];
+                    numbers[i+1] = temp;
+                    finished = false;
+                }
+            }
         }
-        if (numbers[i] > numbers[i+1]) {
-          // swap
-          int temp = numbers[i];
-          numbers[i] = numbers[i+1];
-          numbers[i+1] = temp;
-          finished = false;
-        }
-      }
-    }    
-  }
+    }
 }
 class SimpleThreadExceptionHandler implements
     Thread.UncaughtExceptionHandler {
-  public void uncaughtException(Thread t, Throwable e) {
-    System.err.printf("%s: %s at line %d of %s%n",
-        t.getName(), 
-        e.toString(),
-        e.getStackTrace()[0].getLineNumber(),
-        e.getStackTrace()[0].getFileName());
-  }
+    public void uncaughtException(Thread t, Throwable e) {
+        System.err.printf("%s: %s at line %d of %s%n",
+                t.getName(), 
+                e.toString(),
+                e.getStackTrace()[0].getLineNumber(),
+                e.getStackTrace()[0].getFileName());
+    }
 }
 ```
 
 - blocking queue
 
-```
+```java
 public class Producer extends Thread {
-  private BlockingQueue q;
-  private PrintStream out;
-  public Producer(BlockingQueue q, PrintStream out) {
-    setName("Producer");
-    this.q = q;
-    this.out = out;
-  }
-  public void run() {
-    try {
-      while (true) {
-        q.put(produce());
-      }
-    } catch (InterruptedException e) {
-      out.printf("%s interrupted: %s", getName(), e.getMessage());
+    private BlockingQueue q;
+    private PrintStream out;
+    public Producer(BlockingQueue q, PrintStream out) {
+        setName("Producer");
+        this.q = q;
+        this.out = out;
     }
-  }
-  private String produce() {
-    while (true) {
-      double r = Math.random();
-      // Only goes forward 1/10 of the time
-      if ((r*100) < 10) {
-        String s = String.format("Inserted at %tc", new Date());
-        return s;
-      }
+    public void run() {
+        try {
+            while (true) {
+                q.put(produce());
+            }
+        }
+        catch (InterruptedException e) {
+            out.printf("%s interrupted: %s", getName(), e.getMessage());
+        }
     }
-  }
+    private String produce() {
+        while (true) {
+            double r = Math.random();
+            // Only goes forward 1/10 of the time
+            if ((r*100) < 10) {
+                String s = String.format("Inserted at %tc", new Date());
+                return s;
+            }
+        }
+    }
 }
 ```
 
@@ -468,7 +474,7 @@ public class Producer extends Thread {
 
 - Arrays
 
-```
+```java
 Arrays.sort(myArray);
 Arrays.toString(myArray)
 Arrays.binarySearch(myArray, 98)
@@ -480,8 +486,8 @@ Arrays.deepEquals(ticTacToe, ticTacToe3)
 
 避开集合的 add/remove 操作，使用 offer、poll 操作（不抛异常）
 
-```
-Queue q = new LinkedList(); 采用它来实现queue
+```java
+Queue q = new LinkedList();  //采用它来实现queue
 ```
 
 - Override 返回类型
