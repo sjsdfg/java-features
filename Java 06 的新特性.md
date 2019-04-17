@@ -18,14 +18,14 @@ Scripting for the Java Platform
 
 - 基本使用
 
-```
+```java
 public class BasicScripting {
     public void greet() throws ScriptException {
         ScriptEngineManager manager = new ScriptEngineManager();
         //支持通过名称、文件扩展名、MIMEtype查找
         ScriptEngine engine = manager.getEngineByName("JavaScript");
-//        engine = manager.getEngineByExtension("js");
-//        engine = manager.getEngineByMimeType("text/javascript");
+        //        engine = manager.getEngineByExtension("js");
+        //        engine = manager.getEngineByMimeType("text/javascript");
         if (engine == null) {
             throw new RuntimeException("找不到JavaScript语言执行引擎。");
         }
@@ -34,7 +34,8 @@ public class BasicScripting {
     public static void main(String[] args) {
         try {
             new BasicScripting().greet();
-        } catch (ScriptException ex) {
+        }
+        catch (ScriptException ex) {
             Logger.getLogger(BasicScripting.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
@@ -43,7 +44,7 @@ public class BasicScripting {
 
 - 绑定上下文
 
-```
+```java
 public class ScriptContextBindings extends JsScriptRunner {
     public void scriptContextBindings() throws ScriptException {
         ScriptEngine engine = getJavaScriptEngine();
@@ -83,7 +84,7 @@ public class ScriptContextBindings extends JsScriptRunner {
 
 ### 2、JSR199--Java Compiler API
 
-```
+```java
 public class JavaCompilerAPICompiler {
     public void compile(Path src, Path output) throws IOException {
         JavaCompiler compiler = ToolProvider.getSystemJavaCompiler();
@@ -91,7 +92,7 @@ public class JavaCompilerAPICompiler {
             Iterable<? extends JavaFileObject> compilationUnits = fileManager.getJavaFileObjects(src.toFile());
             Iterable<String> options = Arrays.asList("-d", output.toString());
             JavaCompiler.CompilationTask task = compiler.getTask(null, fileManager, null, options, null, compilationUnits);
-            boolean result = task.call();
+            Boolean result = task.call();
         }
     }
 }
