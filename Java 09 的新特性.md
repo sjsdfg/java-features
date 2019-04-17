@@ -81,23 +81,23 @@
 
 以前大多使用 Guava 类库集合类的工厂，比如
 
-```
+```java
 Lists.newArrayList(1,2,3,4,5);
 Sets.newHashSet(1,2,3,4,5);
 Maps.newHashMap();
 ```
 
-注意，上面这种返回的集合是 mutable 的
+>  注意，上面这种返回的集合是 mutable 的
 
-现在 java9 可以直接利用 jdk 内置的集合工厂，比如
+现在 Java 9 可以直接利用 jdk 内置的集合工厂，比如
 
-```
+```java
 List.of(1,2,3,4,5);
 Set.of(1,2,3,4,5);
 Map.of("key1","value1","key2","value2","key3","value3");
 ```
 
-注意，jdk9 上面这种集合工厂返回的是 immutable 的
+注意，Jdk 9 上面这种集合工厂返回的是 immutable 的
 
 ### Process API Updates
 
