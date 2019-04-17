@@ -20,7 +20,7 @@
 
 ### 1、suppress 异常 (`新语法`)
 
-```
+```java
 /**
  * 记录异常，不被淹没
  * addSuppressed
@@ -31,16 +31,19 @@ class ReadFile {
         IOException readException = null;
         try {
             input = new FileInputStream(filename);
-        } catch (IOException ex) {
+        }
+        catch (IOException ex) {
             readException = ex;
-        } finally {
+        }
+        finally {
             if (input != null) {
                 try {
                     input.close();
-                } catch (IOException ex) {
+                }
+                catch (IOException ex) {
                     if (readException == null) {
                         readException = ex;
-                    }else{
+                    } else {
                         //使用java7的
                         readException.addSuppressed(ex);
                     }
@@ -56,21 +59,23 @@ class ReadFile {
 
 ### 2、捕获多个异常 (`新语法`)
 
-```
+```java
 public void handle() {
-        ExceptionThrower thrower = new ExceptionThrower();
-        try {
-            thrower.manyExceptions();
-        } catch (ExceptionA | ExceptionB ab) {
-            System.out.println(ab.getClass());
-        } catch (ExceptionC c) {
-        }
+    ExceptionThrower thrower = new ExceptionThrower();
+    try {
+        thrower.manyExceptions();
     }
+    catch (ExceptionA | ExceptionB ab) {
+        System.out.println(ab.getClass());
+    }
+    catch (ExceptionC c) {
+    }
+}
 ```
 
 ### 3、try-with-resources(`新语法`)
 
-```
+```java
 /**
  * try-with-resource
  * 不需要使用finally来保证打开的流被正确关闭
@@ -94,7 +99,7 @@ public class ResourceBasicUsage {
 
 实现 AutoCloseable
 
-```
+```java
 /**
  * @created 2014-07-21
  */
@@ -121,47 +126,49 @@ public class CustomResource  implements AutoCloseable {
 
 ```
 public static void main(String[] args){
-        ELProcessor el = new ELProcessor();
-        assert (el.eval("Math.random()") instanceof Double);
-    }
+    ELProcessor el = new ELProcessor();
+    assert (el.eval("Math.random()") instanceof double);
+}
 ```
 
 ### 5、JSR203-More New I/O APIs for the Java Platform(`新规范`)
 
 - bytebuffer
 
-```
+```java
 public class ByteBufferUsage {
     public void useByteBuffer() {
         ByteBuffer buffer = ByteBuffer.allocate(32);
         buffer.put((byte)1);
         buffer.put(new byte[3]);
-        buffer.putChar('A');
-        buffer.putFloat(0.0f);
-        buffer.putLong(10, 100L);
-        System.out.println(buffer.getChar(4));
+        buffer.putchar('A');
+        buffer.putfloat(0.0f);
+        buffer.putlong(10, 100L);
+        System.out.println(buffer.getchar(4));
         System.out.println(buffer.remaining());
     }
     public void byteOrder() {
         ByteBuffer buffer = ByteBuffer.allocate(4);
-        buffer.putInt(1);
+        buffer.putint(1);
         buffer.order(ByteOrder.LITTLE_ENDIAN);
-        buffer.getInt(0); //值为16777216
+        buffer.getint(0);
+        //值为16777216
     }
     public void compact() {
         ByteBuffer buffer = ByteBuffer.allocate(32);
         buffer.put(new byte[16]);
         buffer.flip();
-        buffer.getInt();
+        buffer.getint();
         buffer.compact();
         int pos = buffer.position();
     }
     public void viewBuffer() {
         ByteBuffer buffer = ByteBuffer.allocate(32);
-        buffer.putInt(1);
+        buffer.putint(1);
         IntBuffer intBuffer = buffer.asIntBuffer();
         intBuffer.put(2);
-        int value = buffer.getInt(); //值为2
+        int value = buffer.getint();
+        //值为2
     }
     /**
      * @param args the command line arguments
@@ -178,23 +185,24 @@ public class ByteBufferUsage {
 
 - filechannel
 
-```
+```java
 public class FileChannelUsage {
     public void openAndWrite() throws IOException {
         FileChannel channel = FileChannel.open(Paths.get("my.txt"), StandardOpenOption.CREATE, StandardOpenOption.WRITE);
         ByteBuffer buffer = ByteBuffer.allocate(64);
-        buffer.putChar('A').flip();
+        buffer.putchar('A').flip();
         channel.write(buffer);
     }
     public void readWriteAbsolute() throws IOException {
         FileChannel channel = FileChannel.open(Paths.get("absolute.txt"), StandardOpenOption.READ, StandardOpenOption.CREATE, StandardOpenOption.WRITE);
-        ByteBuffer writeBuffer = ByteBuffer.allocate(4).putChar('A').putChar('B');
+        ByteBuffer writeBuffer = ByteBuffer.allocate(4).putchar('A').putchar('B');
         writeBuffer.flip();
         channel.write(writeBuffer, 1024);
         ByteBuffer readBuffer = ByteBuffer.allocate(2);
         channel.read(readBuffer, 1026);
         readBuffer.flip();
-        char result = readBuffer.getChar(); //值为'B'
+        char result = readBuffer.getchar();
+        //值为'B'
     }
     /**
      * @param args the command line arguments
@@ -213,7 +221,7 @@ JSR 292: Supporting Dynamically Typed Languages on the JavaTM Platform，支持�
 
 - 方法句柄 MethodHandle
 
-```
+```java
 public class ThreadPoolManager {
     private final ScheduledExecutorService stpe = Executors
             .newScheduledThreadPool(2);
@@ -283,7 +291,7 @@ public class ThreadPoolManager {
 
 - 调用
 
-```
+```java
 public class ThreadPoolMain {
     /**
      * 如果被继承，还能在静态上下文寻找正确的class
@@ -299,8 +307,9 @@ public class ThreadPoolMain {
         try {
             System.out.println("With Reflection");
             meth.invoke(hndl);
-        } catch (IllegalAccessException | IllegalArgumentException
-                | InvocationTargetException e) {
+        }
+        catch (IllegalAccessException | IllegalArgumentException
+                        | InvocationTargetException e) {
             e.printStackTrace();
         }
     }
@@ -314,7 +323,8 @@ public class ThreadPoolMain {
         try {
             System.out.println("With Method Handle");
             mh.invokeExact(manager, hndl);
-        } catch (Throwable e) {
+        }
+        catch (Throwable e) {
             e.printStackTrace();
         }
     }
@@ -323,11 +333,12 @@ public class ThreadPoolMain {
         manager = new ThreadPoolManager(lbq);
         final QueueReaderTask msgReader = new QueueReaderTask(100) {
             @Override
-            public void doAction(String msg_) {
+                        public void doAction(String msg_) {
                 if (msg_ != null)
-                    System.out.println("Msg recvd: " + msg_);
+                                    System.out.println("Msg recvd: " + msg_);
             }
-        };
+        }
+        ;
         ScheduledFuture<?> hndl = manager.run(msgReader);
         cancelUsingMH(hndl);
         // cancelUsingProxy(hndl);
@@ -340,26 +351,27 @@ public class ThreadPoolMain {
 
 - abort 方法
 
-```
+```java
 public class AbortConnection {
     public void abortConnection() throws SQLException {
         Connection connection = DriverManager
-                .getConnection("jdbc:derby://localhost/java7book");
+                        .getConnection("jdbc:derby://localhost/java7book");
         ThreadPoolExecutor executor = new DebugExecutorService(2, 10, 60,
-                TimeUnit.SECONDS, new LinkedBlockingQueue<Runnable>());
+                        TimeUnit.SECONDS, new LinkedBlockingQueue<Runnable>());
         connection.abort(executor);
         executor.shutdown();
         try {
             executor.awaitTermination(5, TimeUnit.MINUTES);
             System.out.println(executor.getCompletedTaskCount());
-        } catch (InterruptedException e) {
+        }
+        catch (InterruptedException e) {
             e.printStackTrace();
         }
     }
     private static class DebugExecutorService extends ThreadPoolExecutor {
         public DebugExecutorService(int corePoolSize, int maximumPoolSize,
-                long keepAliveTime, TimeUnit unit,
-                BlockingQueue<Runnable> workQueue) {
+                        long keepAliveTime, TimeUnit unit,
+                        BlockingQueue<Runnable> workQueue) {
             super(corePoolSize, maximumPoolSize, keepAliveTime, unit, workQueue);
         }
         public void beforeExecute(Thread t, Runnable r) {
@@ -371,7 +383,8 @@ public class AbortConnection {
         AbortConnection ca = new AbortConnection();
         try {
             ca.abortConnection();
-        } catch (SQLException e) {
+        }
+        catch (SQLException e) {
             e.printStackTrace();
         }
     }
@@ -380,14 +393,14 @@ public class AbortConnection {
 
 - 自动关闭
 
-```
+```java
 public class SetSchema {
     public void setSchema() throws SQLException {
         try (Connection connection = DriverManager
-                .getConnection("jdbc:derby://localhost/java7book")) {
+                        .getConnection("jdbc:derby://localhost/java7book")) {
             connection.setSchema("DEMO_SCHEMA");
             try (Statement stmt = connection.createStatement();
-                    ResultSet rs = stmt.executeQuery("SELECT * FROM author")) {
+            ResultSet rs = stmt.executeQuery("SELECT * FROM author")) {
                 while (rs.next()) {
                     System.out.println(rs.getString("name"));
                 }
@@ -398,7 +411,8 @@ public class SetSchema {
         SetSchema ss = new SetSchema();
         try {
             ss.setSchema();
-        } catch (SQLException e) {
+        }
+        catch (SQLException e) {
             e.printStackTrace();
         }
     }
@@ -407,28 +421,27 @@ public class SetSchema {
 
 - 自动映射
 
-```
+```java
 public class UseSQLData {
-    
     public void useSQLData() throws SQLException {
         try (Connection connection = DriverManager
-                .getConnection("jdbc:derby://localhost/java7book")) {
+                        .getConnection("jdbc:derby://localhost/java7book")) {
             Map<String,Class<?>> typeMap = new HashMap<String,Class<?>>();
             typeMap.put("java7book.Book", Book.class);
             try (Statement stmt = connection.createStatement();
-                    ResultSet rs = stmt.executeQuery("SELECT * FROM book")) {
+            ResultSet rs = stmt.executeQuery("SELECT * FROM book")) {
                 while (rs.next()) {
                     System.out.println(rs.getObject(1, Book.class));
                 }
             }
         }
     }
-    
     public static void main(String[] args) {
         UseSQLData usd = new UseSQLData();
         try {
             usd.useSQLData();
-        } catch (SQLException e) {
+        }
+        catch (SQLException e) {
             e.printStackTrace();
         }
     }
@@ -437,18 +450,25 @@ public class UseSQLData {
 
 ### 8、Path 接口 (`重要接口更新`)
 
-```
+```java
 public class PathUsage {
     public void usePath() {
         Path path1 = Paths.get("folder1", "sub1");
         Path path2 = Paths.get("folder2", "sub2");
-        path1.resolve(path2); //folder1\sub1\folder2\sub2
-        path1.resolveSibling(path2); //folder1\folder2\sub2
-        path1.relativize(path2); //..\..\folder2\sub2
-        path1.subpath(0, 1); //folder1
-        path1.startsWith(path2); //false
-        path1.endsWith(path2); //false
-        Paths.get("folder1/./../folder2/my.text").normalize(); //folder2\my.text
+        path1.resolve(path2);
+        //folder1sub1folder2sub2
+        path1.resolveSibling(path2);
+        //folder1folder2sub2
+        path1.relativize(path2);
+        //....folder2sub2
+        path1.subpath(0, 1);
+        //folder1
+        path1.startsWith(path2);
+        //false
+        path1.endsWith(path2);
+        //false
+        Paths.get("folder1/./../folder2/my.text").normalize();
+        //folder2my.text
     }
     /**
      * @param args the command line arguments
@@ -462,7 +482,7 @@ public class PathUsage {
 
 ### 9、DirectoryStream
 
-```
+```java
 public class ListFile {
     public void listFiles() throws IOException {
         Path path = Paths.get("");
@@ -485,7 +505,7 @@ public class ListFile {
 
 ### 10、Files
 
-```
+```java
 public class FilesUtils {
     public void manipulateFiles() throws IOException {
         Path newFile = Files.createFile(Paths.get("new.txt").toAbsolutePath());
@@ -511,7 +531,7 @@ public class FilesUtils {
 
 ### 11、WatchService
 
-```
+```java
 public class WatchAndCalculate {
     public void calculate() throws IOException, InterruptedException {
         WatchService service = FileSystems.getDefault().newWatchService();
@@ -546,7 +566,7 @@ jcmd 是为了替代 jps 出现了，包含了 jps 的大部分功能并新增�
 
 列出所有的 Java 虚拟机，针对每一个虚拟机可以使用 help 列出它们支持的命令。
 
-```
+```shell
 jcmd -l
 15308 org.eclipse.jetty.xml.XmlConfiguration /tmp/start4070493346048555702.properties /opt/educat/apps/conf/jetty8.xml
 5624 sun.tools.jcmd.JCmd -l
@@ -555,7 +575,7 @@ jcmd -l
 
 - jcmd pid help
 
-```
+```shell
 jcmd 15308 help
 15308:
 The following commands are available:
@@ -579,7 +599,7 @@ For more information about a specific command use 'help <command>'.
 
 - jcmd pid VM.flags 查看启动参数
 
-```
+```shell
 jcmd 15308 VM.flags
 15308:
 -XX:+DisableExplicitGC 
@@ -612,7 +632,7 @@ jcmd 15308 VM.flags
 - jcmd pid VM.uptime 查看虚拟机启动时间
 - jcmd pid PerfCounter.print 查看性能统计
 
-```
+```shell
 jcmd 15308 PerfCounter.print
 15308:
 java.ci.totalTime=79326405
